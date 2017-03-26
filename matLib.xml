@@ -1,0 +1,737 @@
+<?xml version="1.0"?>
+<!--
+   Material library for ca_wizard_mechanical v0.1
+   Most of the provided data is not verified and may be inaccurate. CHECK DATA BEFORE USE!
+
+   This work is licensed under the terms and conditions of the GNU General Public License version 3
+   Copyright (C) 2017 Dominik Lechleitner
+   Contact: kaktus018(at)gmail.com
+   GitHub repository: https://github.com/kaktus018/ca_wizard_mechanical
+
+   This file is part of ca_wizard_mechanical.
+ 
+   ca_wizard_mechanical is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+ 
+   ca_wizard_mechanical is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+ 
+   You should have received a copy of the GNU General Public License
+   along with ca_wizard_mechanical.  If not, see <http://www.gnu.org/licenses/>.
+
+
+   xml-tree structure: all tags for a materialDataSet have to exist (although they can be left blank).
+   However, Young's modulus and Poisson's ratio have to be set to a numeric value (as they are needed for
+   all featured analysis types).
+-->
+
+<materials>
+    <materialDataSet name="AlMgSi1 F31">
+        <materialNumber>3.2315.72</materialNumber>
+        <category>aluminium alloy</category>
+        <YoungsModulus>70000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000023</alpha>
+        <density>2700</density>
+    </materialDataSet>
+    <materialDataSet name="AlMg3 F24">
+        <materialNumber>3.3535.26</materialNumber>
+        <category>aluminium alloy</category>
+        <YoungsModulus>70000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000023</alpha>
+        <density>2700</density>
+    </materialDataSet>
+    <materialDataSet name="AlZn4.5Mg1 F35">
+        <materialNumber>3.4335.71</materialNumber>
+        <category>aluminium alloy</category>
+        <YoungsModulus>70000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000023</alpha>
+        <density>2700</density>
+    </materialDataSet>
+    <materialDataSet name="S185">
+        <materialNumber>1.0035</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S235JRG1">
+        <materialNumber>1.0036</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S235JR">
+        <materialNumber>1.0037</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S275JR">
+        <materialNumber>1.0044</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S335JR">
+        <materialNumber>1.0045</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="E295">
+        <materialNumber>1.0050</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="E335">
+        <materialNumber>1.0060</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="E360">
+        <materialNumber>1.0070</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S235JO">
+        <materialNumber>1.0114</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S275JO">
+        <materialNumber>1.0143</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="E295 GC">
+        <materialNumber>1.0533</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="E335 GC">
+        <materialNumber>1.0543</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S335JO">
+        <materialNumber>1.0553</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S355J2G3">
+        <materialNumber>1.0570</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="E360 GC">
+        <materialNumber>1.0633</materialNumber>
+        <category>structural steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C10">
+        <materialNumber>1.0301</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C15">
+        <materialNumber>1.0401</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="2C10">
+        <materialNumber>1.1121</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="3C15">
+        <materialNumber>1.1140</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="15CrNi6">
+        <materialNumber>1.5919</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="20NiCrMo2">
+        <materialNumber>1.6523</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="17CrNiMo6">
+        <materialNumber>1.6587</materialNumber>
+        <category>case-hardened steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S275N">
+        <materialNumber>1.0490</materialNumber>
+        <category>fine-grained steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S335N">
+        <materialNumber>1.0545</materialNumber>
+        <category>fine-grained steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S460N">
+        <materialNumber>1.8901</materialNumber>
+        <category>fine-grained steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S420N">
+        <materialNumber>1.8902</materialNumber>
+        <category>fine-grained steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJL-100">
+        <materialNumber>0.6010</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>88000e6</YoungsModulus>
+        <PoissonRatio>0.29</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7100</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJL-150">
+        <materialNumber>0.6015</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>95000e6</YoungsModulus>
+        <PoissonRatio>0.28</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7100</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJL-200">
+        <materialNumber>0.6020</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>105000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7150</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJL-250">
+        <materialNumber>0.6025</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>115000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJL-300">
+        <materialNumber>0.6030</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>125000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7250</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJL-350">
+        <materialNumber>0.6035</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>135000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7300</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJS-400-15">
+        <materialNumber>0.7040</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>167000e6</YoungsModulus>
+        <PoissonRatio>0.28</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7100</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJS-500-7">
+        <materialNumber>0.7050</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>170000e6</YoungsModulus>
+        <PoissonRatio>0.29</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7100</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJS-600-3">
+        <materialNumber>0.7060</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>177000e6</YoungsModulus>
+        <PoissonRatio>0.32</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJS-700-2">
+        <materialNumber>0.7070</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>180000e6</YoungsModulus>
+        <PoissonRatio>0.34</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJS-800-1">
+        <materialNumber>0.7080</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>180000e6</YoungsModulus>
+        <PoissonRatio>0.34</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMW-350-4">
+        <materialNumber>0.8035</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMW-360-12">
+        <materialNumber>0.8038</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMW-400-5">
+        <materialNumber>0.8040</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMW-450-7">
+        <materialNumber>0.8045</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMB-350-10">
+        <materialNumber>0.8135</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMB-550-4">
+        <materialNumber>0.8155</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="EN-GJMB-650-2">
+        <materialNumber>0.8165</materialNumber>
+        <category>cast iron</category>
+        <YoungsModulus>175000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.00001</alpha>
+        <density>7200</density>
+    </materialDataSet>
+    <materialDataSet name="S260NC">
+        <materialNumber>1.0971</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S340MC">
+        <materialNumber>1.0974</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S380MC">
+        <materialNumber>1.0978</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S420MC">
+        <materialNumber>1.0980</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S460MC">
+        <materialNumber>1.0982</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S500MC">
+        <materialNumber>1.0984</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S550MC">
+        <materialNumber>1.0986</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="S690MC">
+        <materialNumber>1.0966</materialNumber>
+        <category>cold-formed steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="X39CrMo17-1">
+        <materialNumber>1.4122</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>213000e6</YoungsModulus>
+        <PoissonRatio>0.31</PoissonRatio>
+        <alpha>0.0000104</alpha>
+        <density>7700</density>
+    </materialDataSet>
+    <materialDataSet name="X5CrNi18-10">
+        <materialNumber>1.4301</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>200000e6</YoungsModulus>
+        <PoissonRatio>0.23</PoissonRatio>
+        <alpha>0.000016</alpha>
+        <density>7900</density>
+    </materialDataSet>
+    <materialDataSet name="X3CrNiMo13-14">
+        <materialNumber>1.4313</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>200000e6</YoungsModulus>
+        <PoissonRatio>0.33</PoissonRatio>
+        <alpha>0.0000105</alpha>
+        <density>7700</density>
+    </materialDataSet>
+    <materialDataSet name="X2CrNiN24-4">
+        <materialNumber>1.4362</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>200000e6</YoungsModulus>
+        <PoissonRatio>0.23</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7800</density>
+    </materialDataSet>
+    <materialDataSet name="X5CrNiMo17-12-2">
+        <materialNumber>1.4401</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>200000e6</YoungsModulus>
+        <PoissonRatio>0.32</PoissonRatio>
+        <alpha>0.000016</alpha>
+        <density>8000</density>
+    </materialDataSet>
+    <materialDataSet name="X2CrNiMoN17-13-3">
+        <materialNumber>1.4429</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>200000e6</YoungsModulus>
+        <PoissonRatio>0.23</PoissonRatio>
+        <alpha>0.000016</alpha>
+        <density>8000</density>
+    </materialDataSet>
+    <materialDataSet name="X6CrNiTi18-10">
+        <materialNumber>1.4541</materialNumber>
+        <category>stainless steel</category>
+        <YoungsModulus>200000e6</YoungsModulus>
+        <PoissonRatio>0.23</PoissonRatio>
+        <alpha>0.000016</alpha>
+        <density>7900</density>
+    </materialDataSet>
+    <materialDataSet name="G200">
+        <materialNumber>1.0420</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="G230">
+        <materialNumber>1.0446</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="G260">
+        <materialNumber>1.0552</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="G300">
+        <materialNumber>1.0558</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="G20Mn5">
+        <materialNumber>1.1120</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="G16Mn5">
+        <materialNumber>1.1131</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="G30Mn5">
+        <materialNumber>1.1165</materialNumber>
+        <category>steel casting alloy</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="1C22">
+        <materialNumber>1.0402</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="1C35">
+        <materialNumber>1.0501</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="1C45">
+        <materialNumber>1.0503</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="1C60">
+        <materialNumber>1.0601</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="3C22">
+        <materialNumber>1.1149</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C22E">
+        <materialNumber>1.1151</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C25E">
+        <materialNumber>1.1158</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="28Mn6">
+        <materialNumber>1.1170</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C30E">
+        <materialNumber>1.1178</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="3C35">
+        <materialNumber>1.1180</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C40E">
+        <materialNumber>1.1186</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="3V45">
+        <materialNumber>1.1201</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C55E">
+        <materialNumber>1.1203</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C50E">
+        <materialNumber>1.1206</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="C60E">
+        <materialNumber>1.1221</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="36CrNiMo4">
+        <materialNumber>1.6511</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="30CrNiMo8">
+        <materialNumber>1.6580</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="34CrNiMo6">
+        <materialNumber>1.6582</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+    <materialDataSet name="36NiCrMo16">
+        <materialNumber>1.6773</materialNumber>
+        <category>quenched and tempered steel</category>
+        <YoungsModulus>210000e6</YoungsModulus>
+        <PoissonRatio>0.3</PoissonRatio>
+        <alpha>0.000011</alpha>
+        <density>7850</density>
+    </materialDataSet>
+</materials>
