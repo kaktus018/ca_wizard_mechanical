@@ -10,7 +10,6 @@ I recently did some work on the code and wasn’t able to test it a lot (especia
 
 My personal scope for future development: add logic for modal and maybe buckling analyses, later add non-linear material functionalities (although I have to admit that I never even came in touch with non-linear material models).
 
-To run it, you will need Python v. 3 and the following libraries: os, pickle, shutil, webbrowser, time, re, codecs, xml, urllib and tkinter. Also, take a look at the [user guide](https://github.com/kaktus018/ca_wizard_mechanical/wiki/User-Guide) in the wiki.
+To run it, you will need Python v. 3 and the following libraries: os, pickle, shutil, webbrowser, time, re, codecs, xml, urllib and tkinter. Download the files `cawm_gui.py`, `cawm_classes.py`, `matLib.xml` and `__init__.py` and save them at the same location. Then run "cawm_gui.py" in the Python interpreter. Also, take a look at the [user guide](https://github.com/kaktus018/ca_wizard_mechanical/wiki/User-Guide) in the wiki.
 
 For license information, take a look at [LICENSE.txt](https://github.com/kaktus018/ca_wizard_mechanical/LICENSE.txt).
-
