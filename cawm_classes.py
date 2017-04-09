@@ -679,7 +679,7 @@ class SolverSet:
                     contactStr = contactStr + "ALGO_CONT='" + el.contactAlgo + "',"
                     if el.contactAlgo == "PENALISATION":
                         contactStr = contactStr + "E_N=" + el.E_N + ","
-                    if el.globalSettings.frictionModel == "COULOMB":
+                    if el.globalSettings.frictionModel == "Coulomb":
                         contactStr = contactStr + "COULOMB=" + el.fricCoeff + "," + "ALGO_FROT='PENALISATION',E_T=" + el.E_T + ","
                 else:
                     if el.globalSettings.frictionModel == "Coulomb":
