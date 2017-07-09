@@ -19,4 +19,5 @@ Version overview:
 - v.0.1: Initial upload
   
 - v.0.2: Added support for custom Python functions for restraints, loads and temperature fields.
-  
+
+The latest version can be found in the [development branch](https://github.com/kaktus018/ca_wizard_mechanical/tree/development).
