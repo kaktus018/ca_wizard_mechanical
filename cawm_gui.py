@@ -1,5 +1,5 @@
 
-#   ca_wizard_mechanical, version 0.1
+#   ca_wizard_mechanical, version 0.2
 #   Allows the generation of comm-files for simple 3D structural analyses in code_aster with an interactive GUI
 #
 #   This work is licensed under the terms and conditions of the GNU General Public License version 3
@@ -43,6 +43,7 @@ from cawm_classes import *
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 names = []
+functions = []
 materialSets = []
 nodeJointSets = []
 restraintSets = []
@@ -52,8 +53,8 @@ thermalSets = []
 geomEntities = ("Volume","Surface","Edge","Vertex/Node","Node joint group")
 
 matLibPath = "matLib.xml"
-cawmVersion = "0.1"
-mainFormSize = "650x600"
+cawmVersion = "0.2"
+mainFormSize = "730x600"
 
 setMatLibPath(matLibPath)
 setVersion(cawmVersion)
@@ -189,13 +190,101 @@ def deleteName():
     else:
         messagebox.showerror("ca_wizard", "Nothing selected.")
         
+# Add a Python function
+def addFunction():
+    popup = createPopup("Add Python function",300,80)
+    Label(popup, text="Enter name of function:").pack()
+    nameEntry = Entry(popup)
+    nameEntry.pack()
+    nameEntry.insert(0,"function"+str(len(functions)+1))
+    def clickOK():
+        if nameEntry.get():
+            if not nameEntry.get() in [functions[i].funcName for i in range(len(functions))]:
+                functions.append(PyFunction(nameEntry.get()," # make sure this function returns a scalar with numeric value\n" + \
+                " # take care of proper indentation\n "))
+            else:
+                messagebox.showerror("ca_wizard", "This function name is already in list!")
+                popup.lift()
+                return
+        else:
+            messagebox.showerror("ca_wizard", "Name can not be empty!")
+            popup.lift()
+            return
+        updateFuncAssi()
+        popup.destroy()
+    popup.bind("<Return>", lambda x: clickOK())
+    popup.bind("<Escape>", lambda x: popup.destroy())
+    box = Frame(popup)
+    box.pack()
+    Button(box, text="Ok", command=clickOK).pack(side=LEFT,pady=5,padx=2)    
+    Button(box, text="Cancel", command=popup.destroy).pack(pady=5,padx=2)
+    nameEntry.focus_force()
+    
+# Update function assignments
+def updateFuncAssi():
+    # Functions listbox
+    funcAssiListbox.delete(0,END)
+    for item in functions:
+        funcAssiListbox.insert(END, item.funcName)
+    # Restraints
+    restraintDeltaXCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    restraintDeltaYCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    restraintDeltaZCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    restraintPhiXCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    restraintPhiYCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    restraintPhiZCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    # Loads
+    loadFXCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    loadFYCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    loadFZCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    loadMXCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    loadMYCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    loadMZCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    loadPCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    # Thermal
+    thermConstDeltaTCB['values'] = [functions[i].funcName for i in range(len(functions))]
+    disableWidgets(funcAssiGroup)
+
+# Delete function assignment
+def deleteFuncAssi():
+    if not funcAssiListbox.curselection()==():
+        if messagebox.askquestion("ca_wizard", "Do you really want to delete "+funcAssiListbox.get(funcAssiListbox.curselection()[0])+"?", icon='warning')=="yes":
+            for item in functions:
+                if item.funcName == funcAssiListbox.get(funcAssiListbox.curselection()[0]):
+                    functions.remove(item)
+                    break
+            updateFuncAssi()
+    else:
+        messagebox.showerror("ca_wizard", "Nothing selected.")
+
+# Change function assignment
+def changeFuncAssi():
+    name = funcNameLbl.cget("text").split("(",1)[0].split(" ",1)[1]
+    for item in functions:
+        if item.funcName == name:
+            item.__init__(name,funcText.get('1.0','end-1c'))
+            disableWidgets(funcAssiGroup)
+            break
+
+# Function assignments listbox selection changed event
+def funcAssiListboxSelectionChanged(evt):
+    if not funcAssiListbox.curselection() == ():
+        funcName = funcAssiListbox.get(funcAssiListbox.curselection())
+        for item in functions:
+            if item.funcName == funcName:
+                enableWidgets(funcAssiGroup)
+                funcNameLbl['text'] = "def " + item.funcName + "(x,y,z,t):"
+                funcText.delete('1.0', END)
+                funcText.insert(END, item.funcText)
+                break
+        
 # Analysis type combobox changed event
 def analysisTypeCBChangedEvent(evt):
     if analysisTypeCB.get() == "linear static":
-        ntbook.tab(7, state="disabled")
+        ntbook.tab(8, state="disabled")
         disableWidgets(analysisNonLinSolverOptionsBox)
     else:
-        ntbook.tab(7, state="normal")
+        ntbook.tab(8, state="normal")
         enableWidgets(analysisNonLinSolverOptionsBox)
         if analysisTimeStepsEntry.get() == "0":
             analysisTimeStepsEntry.delete(0, 'end')
@@ -265,8 +354,8 @@ def changeMatAssi():
         
 # Material assignments listbox selection changed event
 def matAssiListboxSelectionChanged(evt):
-    assiName = matAssiListbox.get(matAssiListbox.curselection())
-    if not assiName == ():
+    if not matAssiListbox.curselection() == ():
+        assiName = matAssiListbox.get(matAssiListbox.curselection())
         for item in materialSets:
             if item.assiName == assiName:
                 enableWidgets(matAssiGroup)
@@ -355,8 +444,8 @@ def changeNodeJointAssi():
         
 # Node joint assignments listbox selection changed event
 def nodeJointAssiListboxSelectionChanged(evt):
-    assiName = nodeJointAssiListbox.get(nodeJointAssiListbox.curselection())
-    if not assiName == ():
+    if not nodeJointAssiListbox.curselection() == ():
+        assiName = nodeJointAssiListbox.get(nodeJointAssiListbox.curselection())
         for item in nodeJointSets:
             if item.assiName == assiName:
                 enableWidgets(nodeJointAssiGroup)
@@ -395,8 +484,8 @@ def addRestraintSet():
     def clickOK():
         if nameEntry.get():
             if not nameEntry.get() in [restraintSets[i].assiName for i in range(len(restraintSets))]:
-                restraintSets.append(RestraintSet(nameEntry.get(),restraintAssiNameCB.get(),restraintViaPyFun.get(),restraintDeltaXEntry.get(),
-                restraintDeltaYEntry.get(),restraintDeltaZEntry.get(),restraintPhiXEntry.get(),restraintPhiYEntry.get(),restraintPhiZEntry.get(),
+                restraintSets.append(RestraintSet(nameEntry.get(),restraintAssiNameCB.get(),restraintViaPyFun.get(),restraintDeltaXCB.get(),
+                restraintDeltaYCB.get(),restraintDeltaZCB.get(),restraintPhiXCB.get(),restraintPhiYCB.get(),restraintPhiZCB.get(),
                 restraintXTransEntry.get(),restraintYTransEntry.get(),restraintZTransEntry.get(),rotXVar.get(),rotYVar.get(),rotZVar.get(),
                 restraintReacXEntry.get(),restraintReacYEntry.get(),restraintReacZEntry.get()))
             else:
@@ -441,8 +530,8 @@ def changeRestraintAssi():
     name = restraintAssiNameLbl.cget("text")
     for item in restraintSets:
         if item.assiName == name:
-            item.__init__(name,restraintAssiNameCB.get(),restraintViaPyFun.get(),restraintDeltaXEntry.get(),restraintDeltaYEntry.get(),
-            restraintDeltaZEntry.get(),restraintPhiXEntry.get(),restraintPhiYEntry.get(),restraintPhiZEntry.get(),restraintXTransEntry.get(),
+            item.__init__(name,restraintAssiNameCB.get(),restraintViaPyFun.get(),restraintDeltaXCB.get(),restraintDeltaYCB.get(),
+            restraintDeltaZCB.get(),restraintPhiXCB.get(),restraintPhiYCB.get(),restraintPhiZCB.get(),restraintXTransEntry.get(),
             restraintYTransEntry.get(),restraintZTransEntry.get(),rotXVar.get(),rotYVar.get(),rotZVar.get(),restraintReacXEntry.get(),
             restraintReacYEntry.get(),restraintReacZEntry.get())
             disableWidgets(restraintAssiGroup)
@@ -450,25 +539,24 @@ def changeRestraintAssi():
                 
 # Restraint assignments listbox selection changed event
 def restraintAssiListboxSelectionChanged(evt):
-    assiName = restraintAssiListbox.get(restraintAssiListbox.curselection())
-    if not assiName == ():
+    if not restraintAssiListbox.curselection() == ():
+        assiName = restraintAssiListbox.get(restraintAssiListbox.curselection())
         for item in restraintSets:
             if item.assiName == assiName:
                 enableWidgets(restraintAssiGroup)
                 restraintAssiNameLbl['text'] = assiName
                 restraintViaPyFun.set(item.rotMatViaPython)
-                restraintDeltaXEntry.delete(0, 'end')
-                restraintDeltaXEntry.insert(END, item.deltaX)
-                restraintDeltaYEntry.delete(0, 'end')
-                restraintDeltaYEntry.insert(END, item.deltaY)
-                restraintDeltaZEntry.delete(0, 'end')
-                restraintDeltaZEntry.insert(END, item.deltaZ)
-                restraintPhiXEntry.delete(0, 'end')
-                restraintPhiXEntry.insert(END, item.deltaPhiX)
-                restraintPhiYEntry.delete(0, 'end')
-                restraintPhiYEntry.insert(END, item.deltaPhiY)
-                restraintPhiZEntry.delete(0, 'end')
-                restraintPhiZEntry.insert(END, item.deltaPhiZ)
+                restraintDeltaXCB.set(item.deltaX)
+                restraintDeltaYCB.delete(0, 'end')
+                restraintDeltaYCB.insert(END, item.deltaY)
+                restraintDeltaZCB.delete(0, 'end')
+                restraintDeltaZCB.insert(END, item.deltaZ)
+                restraintPhiXCB.delete(0, 'end')
+                restraintPhiXCB.insert(END, item.deltaPhiX)
+                restraintPhiYCB.delete(0, 'end')
+                restraintPhiYCB.insert(END, item.deltaPhiY)
+                restraintPhiZCB.delete(0, 'end')
+                restraintPhiZCB.insert(END, item.deltaPhiZ)
                 restraintXTransEntry.delete(0, 'end')
                 restraintXTransEntry.insert(END, item.xTrans)
                 restraintYTransEntry.delete(0, 'end')
@@ -526,8 +614,8 @@ def addLoadSet():
     def clickOK():
         if nameEntry.get():
             if not nameEntry.get() in [loadSets[i].assiName for i in range(len(loadSets))]:
-                loadSets.append(LoadSet(nameEntry.get(),loadAssiNameCB.get(),loadTypeCB.get(),loadFXEntry.get(),loadFYEntry.get(),loadFZEntry.get(),
-                loadMXEntry.get(),loadMYEntry.get(),loadMZEntry.get(),loadPEntry.get(),loadGXEntry.get(),loadGYEntry.get(),loadGZEntry.get(),
+                loadSets.append(LoadSet(nameEntry.get(),loadAssiNameCB.get(),loadTypeCB.get(),loadFXCB.get(),loadFYCB.get(),loadFZCB.get(),
+                loadMXCB.get(),loadMYCB.get(),loadMZCB.get(),loadPCB.get(),loadGXEntry.get(),loadGYEntry.get(),loadGZEntry.get(),
                 loadOmegaEntry.get(),loadRotCentXEntry.get(),loadRotCentYEntry.get(),loadRotCentZEntry.get(),loadRotAxisXEntry.get(),loadRotAxisYEntry.get(),
                 loadRotAxisZEntry.get()))
             else:
@@ -547,20 +635,13 @@ def addLoadSet():
     Button(box, text="Ok", command=clickOK).pack(side=LEFT,pady=5,padx=2)    
     Button(box, text="Cancel", command=popup.destroy).pack(pady=5,padx=2)
     enableWidgets(loadAssiGroup)
-    loadFXEntry.delete(0, 'end')
-    loadFXEntry.insert(END,'0')
-    loadFYEntry.delete(0, 'end')
-    loadFYEntry.insert(END,'0')
-    loadFZEntry.delete(0, 'end')
-    loadFZEntry.insert(END,'0')
-    loadMXEntry.delete(0, 'end')
-    loadMXEntry.insert(END,'0')
-    loadMYEntry.delete(0, 'end')
-    loadMYEntry.insert(END,'0')
-    loadMZEntry.delete(0, 'end')
-    loadMZEntry.insert(END,'0')
-    loadPEntry.delete(0, 'end')
-    loadPEntry.insert(END,'0')
+    loadFXCB.set('0')
+    loadFYCB.set('0')
+    loadFZCB.set('0')
+    loadMXCB.set('0')
+    loadMYCB.set('0')
+    loadMZCB.set('0')
+    loadPCB.set('0')
     loadGXEntry.delete(0, 'end')
     loadGXEntry.insert(END,'0')
     loadGYEntry.delete(0, 'end')
@@ -609,35 +690,28 @@ def changeLoadAssi():
     name = loadAssiNameLbl.cget("text")
     for item in loadSets:
         if item.assiName == name:
-            item.__init__(name,loadAssiNameCB.get(),loadTypeCB.get(),loadFXEntry.get(),loadFYEntry.get(),loadFZEntry.get(),loadMXEntry.get(),loadMYEntry.get(),
-            loadMZEntry.get(),loadPEntry.get(),loadGXEntry.get(),loadGYEntry.get(),loadGZEntry.get(),loadOmegaEntry.get(),loadRotCentXEntry.get(),
+            item.__init__(name,loadAssiNameCB.get(),loadTypeCB.get(),loadFXCB.get(),loadFYCB.get(),loadFZCB.get(),loadMXCB.get(),loadMYCB.get(),
+            loadMZCB.get(),loadPCB.get(),loadGXEntry.get(),loadGYEntry.get(),loadGZEntry.get(),loadOmegaEntry.get(),loadRotCentXEntry.get(),
             loadRotCentYEntry.get(),loadRotCentZEntry.get(),loadRotAxisXEntry.get(),loadRotAxisYEntry.get(),loadRotAxisZEntry.get())
             disableWidgets(loadAssiGroup)
             break
                 
 # Load assignments listbox selection changed event
 def loadAssiListboxSelectionChanged(evt):
-    assiName = loadAssiListbox.get(loadAssiListbox.curselection())
-    if not assiName == ():
+    if not loadAssiListbox.curselection() == ():
+        assiName = loadAssiListbox.get(loadAssiListbox.curselection())
         for item in loadSets:
             if item.assiName == assiName:
                 enableWidgets(loadAssiGroup)
                 loadAssiNameLbl['text'] = assiName
                 loadTypeCB.set(item.loadType)
-                loadFXEntry.delete(0, 'end')
-                loadFXEntry.insert(END, item.FX)
-                loadFYEntry.delete(0, 'end')
-                loadFYEntry.insert(END, item.FY)
-                loadFZEntry.delete(0, 'end')
-                loadFZEntry.insert(END, item.FZ)
-                loadMXEntry.delete(0, 'end')
-                loadMXEntry.insert(END, item.MX)
-                loadMYEntry.delete(0, 'end')
-                loadMYEntry.insert(END, item.MY)
-                loadMZEntry.delete(0, 'end')
-                loadMZEntry.insert(END, item.MZ)
-                loadPEntry.delete(0, 'end')
-                loadPEntry.insert(END, item.p)
+                loadFXCB.set(item.FX)
+                loadFYCB.set(item.FY)
+                loadFZCB.set(item.FZ)
+                loadMXCB.set(item.MX)
+                loadMYCB.set(item.MY)
+                loadMZCB.set(item.MZ)
+                loadPCB.set(item.p)
                 loadGXEntry.delete(0, 'end')
                 loadGXEntry.insert(END, item.gX)
                 loadGYEntry.delete(0, 'end')
@@ -705,6 +779,18 @@ def loadTypeCBChangedEvent(evt):
         disableWidgets(loadBoxOmega)
         disableWidgets(loadBoxRotCent)
         disableWidgets(loadBoxRotAxis)
+    elif loadType == "Force on volume":
+        namesList = getNames([0])
+        disableWidgets(loadBoxMX)
+        disableWidgets(loadBoxMY)
+        disableWidgets(loadBoxMZ)
+        disableWidgets(loadBoxP)
+        disableWidgets(loadBoxGX)
+        disableWidgets(loadBoxGY)
+        disableWidgets(loadBoxGZ)
+        disableWidgets(loadBoxOmega)
+        disableWidgets(loadBoxRotCent)
+        disableWidgets(loadBoxRotAxis)
     elif loadType == "Pressure":
         namesList = getNames([1])
         disableWidgets(loadBoxFX)
@@ -731,7 +817,7 @@ def loadTypeCBChangedEvent(evt):
         disableWidgets(loadBoxOmega)
         disableWidgets(loadBoxRotCent)
         disableWidgets(loadBoxRotAxis)
-    else:
+    else: # Force on node
         namesList = getNames([0,1,2,3])
         disableWidgets(loadBoxP)
         disableWidgets(loadBoxGX)
@@ -820,8 +906,8 @@ def changeContactAssi():
             
 # Contact assignments listbox selection changed event
 def contactAssiListboxSelectionChanged(evt):
-    assiName = contactAssiListbox.get(contactAssiListbox.curselection())
-    if not assiName == ():
+    if not contactAssiListbox.curselection() == ():
+        assiName = contactAssiListbox.get(contactAssiListbox.curselection())
         for item in contactSets:
             if item.assiName == assiName:
                 enableWidgets(contactAssiGroup)
@@ -907,8 +993,8 @@ def addThermalSet():
     def clickOK():
         if nameEntry.get():
             if not nameEntry.get() in [thermalSets[i].assiName for i in range(len(thermalSets))]:
-                thermalSets.append(ThermalSet(nameEntry.get(),thermalAssiNameCB.get(),thermModeRadioButton.get(),thermConstDeltaTEntry.get(),thermUniteEntry.get(),
-                thermT0Entry.get(),''))#,thermFunText.get("1.0",'end-1c')))
+                thermalSets.append(ThermalSet(nameEntry.get(),thermalAssiNameCB.get(),thermModeRadioButton.get(),thermConstDeltaTCB.get(),thermUniteEntry.get(),
+                thermT0Entry.get(),''))
             else:
                 messagebox.showerror("ca_wizard", "This assignment name is already in list!")
                 popup.lift()
@@ -953,28 +1039,25 @@ def changeThermalAssi():
     name = thermalAssiNameLbl.cget("text")
     for item in thermalSets:
         if item.assiName == name:
-            item.__init__(name,thermalAssiNameCB.get(),thermModeRadioButton.get(),thermConstDeltaTEntry.get(),thermUniteEntry.get(),
-                thermT0Entry.get(),'')#thermFunText.get("1.0",'end-1c'))
+            item.__init__(name,thermalAssiNameCB.get(),thermModeRadioButton.get(),thermConstDeltaTCB.get(),thermUniteEntry.get(),
+                thermT0Entry.get(),'')
             disableWidgets(thermalAssiGroup)
             break
                 
 # Thermal assignments listbox selection changed event
 def thermalAssiListboxSelectionChanged(evt):
-    assiName = thermalAssiListbox.get(thermalAssiListbox.curselection())
-    if not assiName == ():
+    if not thermalAssiListbox.curselection() == ():
+        assiName = thermalAssiListbox.get(thermalAssiListbox.curselection())
         for item in thermalSets:
             if item.assiName == assiName:
                 enableWidgets(thermalAssiGroup)
                 thermalAssiNameLbl['text'] = assiName
                 thermModeRadioButton.set(item.assiType)
-                thermConstDeltaTEntry.delete(0, 'end')
-                thermConstDeltaTEntry.insert(END, item.deltaT)
+                thermConstDeltaTCB.set(item.deltaT)
                 thermUniteEntry.delete(0, 'end')
                 thermUniteEntry.insert(END, item.unite)
                 thermT0Entry.delete(0, 'end')
                 thermT0Entry.insert(END, item.T0)
-                #thermFunText.delete(0, 'end')
-                #thermFunText.insert(END, item.funStr)
                 thermalAssiNameCB.set('')
                 for i in range(len(thermalAssiNameCB['values'])):
                     if item.nodalGroupName == thermalAssiNameCB['values'][i]:
@@ -984,17 +1067,18 @@ def thermalAssiListboxSelectionChanged(evt):
                 
 # get output set
 def getOutputSet():
-    return OutputSet(resultsNameCB.get(),resuStressTensor.get(),resuEquiStresses.get(),resuEpsilon.get(),resuReactions.get(),resuErrorEsti.get())
+    return OutputSet(resultsNameCB.get(),resuStressTensor.get(),resuEquiStresses.get(),resuEpsilon.get(),resuReactions.get(),resuErrorEsti.get(),resuInclTemp.get())
 
 # get solver set
 def getSolverSet():
-    return SolverSet(analysisTypeCB.get(),analysisTimeStepsEntry.get(),analysisTimeRampDown.get(),analysisStrainModelCB.get(),analysisMethodCB.get(),analysisResiEntry.get(),analysisMaxIterEntry.get(),materialSets,
+    return SolverSet(analysisTypeCB.get(),analysisTimeStepsEntry.get(),analysisEndTimeEntry.get(),analysisTimeRampUp.get(),analysisTimeRampDown.get(),analysisTimeRampFunc.get(),analysisStrainModelCB.get(),
+    analysisMethodCB.get(),analysisResiEntry.get(),analysisMaxIterEntry.get(),functions,filesCheckFuncs.get(),materialSets,
     nodeJointSets,restraintSets,loadSets,contactSets,thermalSets,getOutputSet())
                 
 # Assemble and save the comm-file
 def assembleCOMM():
     try:
-        msgs = getSolverSet().verify(names)
+        msgs = getSolverSet().verify(names,functions)
     except Exception as e:
         messagebox.showerror("ca_wizard", "Unable to proceed with the comm-file generation due to this error:\n" + str(e))
         return
@@ -1050,9 +1134,10 @@ def pickle_load():
         if messagebox.askquestion("ca_wizard", "You are trying to load a save file of a different ca_wizard version. This can lead to a corrupted configuration and runtime erros." \
         " Do you want to continue?", icon='warning')=="no":
             return
-    global names,materialSets,nodeJointSets,restraintSets,loadSets,contactSets,thermalSets,contactGlobalSetting
+    global names,functions,materialSets,nodeJointSets,restraintSets,loadSets,contactSets,thermalSets,contactGlobalSetting
     names = cawObj.names
     updateNames()
+    functions = cawObj.solverSet.functions
     materialSets = cawObj.solverSet.materialSets
     nodeJointSets = cawObj.solverSet.nodeJointSets
     restraintSets = cawObj.solverSet.restraintSets
@@ -1066,6 +1151,8 @@ def pickle_load():
     analysisTimeStepsEntry.delete(0, 'end')
     analysisTimeStepsEntry.insert(END, cawObj.solverSet.timeSteps)
     analysisTimeRampDown.set(cawObj.solverSet.timeRampDown)
+    analysisTimeRampUp.set(cawObj.solverSet.timeRampUp)
+    analysisTimeRampFunc.set(cawObj.solverSet.timeRampFunc)
     analysisMethodCB.set(cawObj.solverSet.method)
     analysisStrainModelCB.set(cawObj.solverSet.strainModel)
     analysisResiEntry.delete(0, 'end')
@@ -1079,10 +1166,13 @@ def pickle_load():
     resuEpsilon.set(cawObj.solverSet.outputSet.EPS)
     resuReactions.set(cawObj.solverSet.outputSet.REAC)
     resuErrorEsti.set(cawObj.solverSet.outputSet.ERME)
+    resuInclTemp.set(cawObj.solverSet.outputSet.TEMP)
     currWorkingDirEntry.delete(0, 'end')
     currWorkingDirEntry.insert(END, cawObj.workingDir)
     studyNameEntry.delete(0, 'end')
     studyNameEntry.insert(END, cawObj.studyName)
+    filesCheckFuncs.set(cawObj.solverSet.checkFuncDefis)
+    updateFuncAssi()
     updateLoadAssi()
     updateMatAssi()
     updateNodeJointAssi()
@@ -1287,7 +1377,7 @@ def showErrorsAlarms():
     popup.geometry("600x800")
     popup.resizable(width=False, height=False)
     popup.lift()
-    Button(popup,text="Open in Google Translator",command=lambda: webbrowser.open("https://translate.google.com/?hl=de#fr/en/" + \
+    Button(popup,text="Open in Google Translator",command=lambda: webbrowser.open("https://translate.google.com/?hl=en#fr/en/" + \
     urllib.parse.quote(errAlStr).replace("/","%2F"),new=0,autoraise=True)).pack()
     box = Label(popup)
     box.pack()
@@ -1304,24 +1394,30 @@ def showErrorsAlarms():
 def enableWidgets(parent):
     for child in parent.winfo_children():
         try:
-            if child.winfo_class() == "TCombobox":
+            if child.winfo_class() == "TCombobox" and child in readonlyComboboxes:
                 child.configure(state='readonly')
+            elif child.winfo_class() == "Text":
+                child.configure(state='normal')
             else:
                 child.configure(state='enable')
         except:
             pass
         for grandchild in child.winfo_children():
             try:
-                if grandchild.winfo_class() == "TCombobox":
+                if grandchild.winfo_class() == "TCombobox" and grandchild in readonlyComboboxes:
                     grandchild.configure(state='readonly')
+                elif grandchild.winfo_class() == "Text":
+                    grandchild.configure(state='normal')
                 else:
                     grandchild.configure(state='enable')
             except:
                 pass
             for greatgrandchild in grandchild.winfo_children():
                 try:
-                    if greatgrandchild.winfo_class() == "TCombobox":
+                    if greatgrandchild.winfo_class() == "TCombobox" and greatgrandchild in readonlyComboboxes:
                         greatgrandchild.configure(state='readonly')
+                    elif greatgrandchild.winfo_class() == "Text":
+                        greatgrandchild.configure(state='normal')
                     else:
                         greatgrandchild.configure(state='enable')
                 except:
@@ -1360,6 +1456,7 @@ mainForm.resizable(width=False, height=False)
 ntbook = Notebook(mainForm)
 licenseTab = Frame(ntbook)
 namesTab = Frame(ntbook)
+functionsTab = Frame(ntbook)
 analysisTab = Frame(ntbook)
 materialsTab = Frame(ntbook)
 nodeJointsTab = Frame(ntbook)
@@ -1371,6 +1468,7 @@ resultsTab = Frame(ntbook)
 filesTab = Frame(ntbook)
 ntbook.add(licenseTab, text='License')
 ntbook.add(namesTab, text='Names')
+ntbook.add(functionsTab, text='Functions')
 ntbook.add(analysisTab, text='Analysis')
 ntbook.add(materialsTab, text='Materials')
 ntbook.add(nodeJointsTab, text='Node joints')
@@ -1415,6 +1513,44 @@ box.pack(pady=20)
 Button(box, text="Add name", command=addName).pack(pady=5)
 Button(box, text="Delete name", command=deleteName).pack()
 
+# Functions Tab
+group = LabelFrame(functionsTab, text="List of Python functions")
+group.pack(side=LEFT, fill=Y, padx=10, pady=10, ipadx=5, ipady=5)
+box = Frame(group, height=500, width=180)
+box.pack_propagate(0)
+box.pack(side=LEFT)
+funcAssiListbox = Listbox(box)
+funcAssiListbox.pack(side=LEFT,padx=5,fill=BOTH,expand=TRUE)
+funcAssiListbox.bind('<<ListboxSelect>>', funcAssiListboxSelectionChanged)
+box = Frame(group)
+box.pack(pady=20)
+Button(box, text="Add", command=addFunction).pack(pady=5)
+Button(box, text="Delete", command=deleteFuncAssi).pack()
+box = Frame(functionsTab)
+box.pack(side=LEFT,fill=Y)
+funcAssiGroup = LabelFrame(box, text="Create/Modify Python function")
+funcAssiGroup.pack(padx=10, pady=10, ipadx=5, ipady=5)
+box = Frame(funcAssiGroup)
+box.pack(fill=BOTH, padx=5, pady=5)
+funcNameLbl = Label(box)
+funcNameLbl.pack(padx=5,side=LEFT)
+Button(box, text="Done", command=changeFuncAssi).pack(side=RIGHT,padx=10)
+box = Frame(funcAssiGroup, height=500, width=400)
+box.pack_propagate(0)
+box.pack()
+funcText = Text(box, wrap=NONE)
+#funcText.bind('<<Modified>>', funcTextChanged)
+SY = Scrollbar(box)
+SX = Scrollbar(box, orient=HORIZONTAL)
+SY.pack(side=RIGHT, fill=Y)
+SX.pack(side=BOTTOM, fill=X)
+funcText.pack(padx=5,side=LEFT,fill=BOTH,expand=TRUE)
+SY.config(command=funcText.yview)
+SX.config(command=funcText.xview)
+funcText.config(yscrollcommand=SY.set)
+funcText.config(xscrollcommand=SX.set)
+disableWidgets(funcAssiGroup)
+
 # Analysis Tab
 box = Frame(analysisTab)
 box.pack(pady=20)
@@ -1425,17 +1561,35 @@ analysisTypeCB.pack(pady=5, padx=10)
 analysisTypeCB.bind("<<ComboboxSelected>>", analysisTypeCBChangedEvent)
 analysisSolverGroup = LabelFrame(analysisTab, text="Solver configuration")
 analysisSolverGroup.pack(padx=10, pady=10, ipadx=5, ipady=5)
-box = Frame(analysisSolverGroup)
+boxT = Frame(analysisSolverGroup)
+boxT.pack(pady=10)
+box = Frame(boxT)
 box.pack()
 Label(box, text="  Time steps: ").pack(side=LEFT)
-box = Frame(box)
-box.pack(padx=10,pady=5)
 analysisTimeStepsEntry = Entry(box)
-analysisTimeStepsEntry.pack(pady=5)
+analysisTimeStepsEntry.pack()
 analysisTimeStepsEntry.insert(END, '0')
+box = Frame(boxT)
+box.pack(padx=10,pady=5)
+Label(box, text="     End time: ").pack(side=LEFT)
+analysisEndTimeEntry = Entry(box)
+analysisEndTimeEntry.pack()
+analysisEndTimeEntry.insert(END, '1')
+box = Frame(boxT)
+box.pack(padx=50,anchor=W)
+analysisTimeRampUp = IntVar()
+analysisTimeRampUp.set(0)
+Checkbutton(box, text = "Ramp loads/restraints up", variable = analysisTimeRampUp, onvalue = 1, offvalue = 0).pack(anchor=W)
+box = Frame(boxT)
+box.pack(padx=50,anchor=W)
 analysisTimeRampDown = IntVar()
 analysisTimeRampDown.set(0)
-Checkbutton(box, text = "ramp down as well", variable = analysisTimeRampDown, onvalue = 1, offvalue = 0).pack()
+Checkbutton(box, text = "Ramp loads/restraints down", variable = analysisTimeRampDown, onvalue = 1, offvalue = 0).pack(anchor=W)
+box = Frame(boxT)
+box.pack(padx=50,anchor=W)
+analysisTimeRampFunc = IntVar()
+analysisTimeRampFunc.set(0)
+Checkbutton(box, text = "Apply ramp to functions as well", variable = analysisTimeRampFunc, onvalue = 1, offvalue = 0).pack(anchor=W)
 box = Frame(analysisSolverGroup)
 box.pack()
 Label(box, text="            Method: ").pack(side=LEFT)
@@ -1554,7 +1708,7 @@ nodeJointNodeNameCB.pack(side=RIGHT, pady=5, padx=10)
 Label(nodeJointAssiGroup, text="Stiffness:").pack()
 box = Frame(nodeJointAssiGroup)
 box.pack(fill=BOTH, padx=5, pady=5)
-Label(box, text="    cX: ").pack(side=LEFT)
+Label(box, text="   cX: ").pack(side=LEFT)
 nodeJointCXEntry = Entry(box,width=20)
 nodeJointCXEntry.pack()
 nodeJointCXEntry.insert(END, '0.1')
@@ -1631,38 +1785,38 @@ Label(restraintAssiGroup, text="  Leave respective field empty for no restraint"
 box = Frame(restraintAssiGroup)
 box.pack(fill=BOTH, pady=5)
 Label(box, text="  \u0394X:   ").pack(side=LEFT)
-restraintDeltaXEntry = Entry(box)
-restraintDeltaXEntry.pack()
+restraintDeltaXCB = Combobox(box)
+restraintDeltaXCB.pack()
 box = Frame(restraintAssiGroup)
 box.pack(fill=BOTH, pady=5)
 Label(box, text="  \u0394Y:   ").pack(side=LEFT)
-restraintDeltaYEntry = Entry(box)
-restraintDeltaYEntry.pack()
+restraintDeltaYCB = Combobox(box)
+restraintDeltaYCB.pack()
 box = Frame(restraintAssiGroup)
 box.pack(fill=BOTH, pady=5)
 Label(box, text="  \u0394Z:   ").pack(side=LEFT)
-restraintDeltaZEntry = Entry(box)
-restraintDeltaZEntry.pack()
+restraintDeltaZCB = Combobox(box)
+restraintDeltaZCB.pack()
 restraintsRotationBox = Frame(restraintAssiGroup)
 restraintsRotationBox.pack(fill=BOTH, pady=5)
 box = Frame(restraintsRotationBox)
 box.pack(fill=BOTH, pady=5)
 Label(box, text="  \u0394\u03D5X: ").pack(side=LEFT)
-restraintPhiXEntry = Entry(box)
-restraintPhiXEntry.pack()
-restraintPhiXEntry.insert(END, '0')
+restraintPhiXCB = Combobox(box)
+restraintPhiXCB.pack()
+restraintPhiXCB.insert(END, '0')
 box = Frame(restraintsRotationBox)
 box.pack(fill=BOTH, pady=5)
 Label(box, text="  \u0394\u03D5Y: ").pack(side=LEFT)
-restraintPhiYEntry = Entry(box)
-restraintPhiYEntry.pack()
-restraintPhiYEntry.insert(END, '0')
+restraintPhiYCB = Combobox(box)
+restraintPhiYCB.pack()
+restraintPhiYCB.insert(END, '0')
 box = Frame(restraintsRotationBox)
 box.pack(fill=BOTH, pady=5)
 Label(box, text="  \u0394\u03D5Z: ").pack(side=LEFT)
-restraintPhiZEntry = Entry(box)
-restraintPhiZEntry.pack()
-restraintPhiZEntry.insert(END, '0')
+restraintPhiZCB = Combobox(box)
+restraintPhiZCB.pack()
+restraintPhiZCB.insert(END, '0')
 restraintRotateViaPythonBox = Frame(restraintAssiGroup)
 restraintRotateViaPythonBox.pack(fill=BOTH, pady=5)
 Label(restraintRotateViaPythonBox, text="  Rotate around point:").pack(pady=5)
@@ -1737,7 +1891,7 @@ loadAssiNameLbl.pack(side=RIGHT)
 box = Frame(loadAssiGroup)
 box.pack(fill=BOTH)
 Label(box, text="  Type: ").pack(side=LEFT)
-loadTypeCB = Combobox(box, values=["Gravity","Centrifugal force","Force on face","Force on edge","Force on node","Pressure"], state='readonly')
+loadTypeCB = Combobox(box, values=["Gravity","Centrifugal force","Force on volume","Force on face","Force on edge","Force on node","Pressure"], state='readonly')
 loadTypeCB.current(0)
 loadTypeCB.pack(side=RIGHT, pady=5, padx=10)
 loadTypeCB.bind("<<ComboboxSelected>>", loadTypeCBChangedEvent)
@@ -1753,42 +1907,42 @@ box.pack(fill=BOTH)
 loadBoxFX = Frame(box)
 loadBoxFX.pack(side=LEFT, pady=5)
 Label(loadBoxFX, text="  FX: ").pack(side=LEFT)
-loadFXEntry = Entry(loadBoxFX,width=15)
-loadFXEntry.pack()
+loadFXCB = Combobox(loadBoxFX,width=15)
+loadFXCB.pack()
 loadBoxMX = Frame(box)
 loadBoxMX.pack(pady=5)
 Label(loadBoxMX, text="  MX: ").pack(side=LEFT)
-loadMXEntry = Entry(loadBoxMX,width=15)
-loadMXEntry.pack()
+loadMXCB = Combobox(loadBoxMX,width=15)
+loadMXCB.pack()
 box = Frame(loadAssiGroup)
 box.pack(fill=BOTH)
 loadBoxFY = Frame(box)
 loadBoxFY.pack(side=LEFT, pady=5)
 Label(loadBoxFY, text="  FY: ").pack(side=LEFT)
-loadFYEntry = Entry(loadBoxFY,width=15)
-loadFYEntry.pack()
+loadFYCB = Combobox(loadBoxFY,width=15)
+loadFYCB.pack()
 loadBoxMY = Frame(box)
 loadBoxMY.pack(pady=5)
 Label(loadBoxMY, text="  MY: ").pack(side=LEFT)
-loadMYEntry = Entry(loadBoxMY,width=15)
-loadMYEntry.pack()
+loadMYCB = Combobox(loadBoxMY,width=15)
+loadMYCB.pack()
 box = Frame(loadAssiGroup)
 box.pack(fill=BOTH)
 loadBoxFZ = Frame(box)
 loadBoxFZ.pack(side=LEFT, pady=5)
 Label(loadBoxFZ, text="  FZ: ").pack(side=LEFT)
-loadFZEntry = Entry(loadBoxFZ,width=15)
-loadFZEntry.pack()
+loadFZCB = Combobox(loadBoxFZ,width=15)
+loadFZCB.pack()
 loadBoxMZ = Frame(box)
 loadBoxMZ.pack(pady=5)
 Label(loadBoxMZ, text="  MZ: ").pack(side=LEFT)
-loadMZEntry = Entry(loadBoxMZ,width=15)
-loadMZEntry.pack()
+loadMZCB = Combobox(loadBoxMZ,width=15)
+loadMZCB.pack()
 loadBoxP = Frame(loadAssiGroup)
 loadBoxP.pack(fill=BOTH, pady=5)
 Label(loadBoxP, text="  p:   ").pack(side=LEFT)
-loadPEntry = Entry(loadBoxP)
-loadPEntry.pack()
+loadPCB = Combobox(loadBoxP)
+loadPCB.pack()
 loadBoxGX = Frame(loadAssiGroup)
 loadBoxGX.pack(fill=BOTH, pady=5)
 Label(loadBoxGX, text="  gX: ").pack(side=LEFT)
@@ -1974,16 +2128,16 @@ Label(box, text="  Assign to: ").pack(side=LEFT)
 thermalAssiNameCB = Combobox(box, values=getNames([0]), state='readonly')
 thermalAssiNameCB.pack(anchor=W,pady=5, padx=10)
 thermalAssiNameCB.current(0)
-modes = [("Constant", "const"),("From file", "file"),("Python function", "fun")]
+modes = [("Constant/Function", "const"),("From file", "file")]
 thermModeRadioButton = StringVar()
 thermModeRadioButton.set("const")
 Radiobutton(thermalAssiGroup, text=modes[0][0],variable=thermModeRadioButton, value=modes[0][1]).pack(anchor=W)
 box = Frame(thermalAssiGroup)
 box.pack(fill=BOTH, padx=5, pady=5)
 Label(box,text="    \u0394T:       ").pack(side=LEFT)
-thermConstDeltaTEntry = Entry(box)
-thermConstDeltaTEntry.pack(anchor=W)
-thermConstDeltaTEntry.insert(END, "0")
+thermConstDeltaTCB = Combobox(box)
+thermConstDeltaTCB.pack(anchor=W)
+thermConstDeltaTCB.set("0")
 Radiobutton(thermalAssiGroup, text=modes[1][0],variable=thermModeRadioButton, value=modes[1][1]).pack(anchor=W)
 box = Frame(thermalAssiGroup)
 box.pack(fill=BOTH, padx=5, pady=5)
@@ -1999,13 +2153,6 @@ thermT0Entry = Entry(box)
 thermT0Entry.pack(anchor=W)
 thermT0Entry.pack(anchor=W)
 thermT0Entry.insert(END, "0")
-# Radiobutton(thermalAssiGroup, text=modes[2][0],variable=thermModeRadioButton, value=modes[2][1]).pack(anchor=W)
-# box = Frame(thermalAssiGroup)
-# box.pack(fill=BOTH, padx=5, pady=5)
-# Label(box,text=" def deltaT(X,Y,Z):").pack(anchor=W)
-# thermFunText = Text(box, height=15)
-# thermFunText.pack(padx=5)
-# thermFunText.insert(END, 'not yet implemented')
 box = Frame(thermalAssiGroup)
 box.pack(fill=BOTH, padx=5, pady=5)
 Button(box, text="Done", command=changeThermalAssi).pack(side=RIGHT,padx=10)
@@ -2025,16 +2172,19 @@ resuEquiStresses = IntVar()
 resuEpsilon = IntVar()
 resuReactions = IntVar()
 resuErrorEsti = IntVar()
+resuInclTemp = IntVar()
 resuStressTensor.set(1)
 resuEquiStresses.set(1)
 resuEpsilon.set(0)
 resuReactions.set(1)
 resuErrorEsti.set(0)
+resuInclTemp.set(0)
 Checkbutton(group, text = "Stress tensor", variable = resuStressTensor, onvalue = 1, offvalue = 0).pack(fill=X)
 Checkbutton(group, text = "Equivalent stresses", variable = resuEquiStresses, onvalue = 1, offvalue = 0).pack(fill=X)
 Checkbutton(group, text = "Strain tensor", variable = resuEpsilon, onvalue = 1, offvalue = 0).pack(fill=X)
 Checkbutton(group, text = "Reactions at restraints", variable = resuReactions, onvalue = 1, offvalue = 0).pack(fill=X)
 Checkbutton(group, text = "A posteriori error estimation", variable = resuErrorEsti, onvalue = 1, offvalue = 0).pack(fill=X)
+Checkbutton(group, text = "Include temperature fields", variable = resuInclTemp, onvalue = 1, offvalue = 0).pack(fill=X)
 
 # Files Tab
 box = Frame(filesTab)
@@ -2065,6 +2215,9 @@ group.pack(side=LEFT, padx=10, pady=10, ipadx=5, ipady=5)
 box = Frame(group, height=10)
 box.pack()
 box.pack_propagate()
+filesCheckFuncs = IntVar()
+filesCheckFuncs.set(1)
+Checkbutton(box, text = "Evaluate function definitions\nin Python during verification", variable = filesCheckFuncs, onvalue = 1, offvalue = 0).pack(fill=X)
 Button(group,text="Create comm-file",width=20,command=assembleCOMM).pack(pady=5)
 Label(group, text="for code_aster version 12.6 (may work with other versions, especially newer ones)",wraplength=200,justify=CENTER).pack()
 box = Frame(group, height=25)
@@ -2076,6 +2229,10 @@ Button(group,text="Open resu-file",width=20,command=openResuFile).pack(pady=3)
 Button(group,text="Export reactions to csv",width=20,command=exportReacCSV).pack(pady=3)
 Button(group,text="Show errors/alarms",width=20,command=showErrorsAlarms).pack(pady=3)
 
-ntbook.tab(7, state="disabled")
+readonlyComboboxes = [analysisTypeCB,analysisMethodCB,analysisStrainModelCB,matAssiMatCB,matSelMatCB,nodeJointGroupNameCB,nodeJointNodeNameCB,
+restraintAssiNameCB,loadAssiNameCB,loadTypeCB,contactFrictionModelCB,contactCContAlgoCB,contactCFricAlgoCB,contactMasterCB,contactSlaveCB,
+contactDContAlgoCB,thermalAssiNameCB,resultsNameCB]
+
+ntbook.tab(8, state="disabled")
 ntbook.select(1)
 mainloop()

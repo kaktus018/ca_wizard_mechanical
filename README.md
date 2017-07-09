@@ -8,10 +8,16 @@ First of all, I would like to point out that I'm no professional programmer, new
 The functionality is a little bit cut to my own needs (one of them being that I only perform simulations with 3D elements), but I still think that it can be useful to others. I’m happy to receive your feedback and make the code even better. Commits are of course welcome as well.
 I recently did some work on the code and wasn’t able to test it a lot (especially with simulations). So there is a good chance one or two bugs might be hiding somewhere.
 
-My personal scope for future development: add logic for modal and maybe buckling analyses, later add non-linear material functionalities (although I have to admit that I never even came in touch with non-linear material models).
+My personal scope for future development: add logic for modal and maybe buckling analyses, anisotropic materials and later add non-linear material functionalities (although I have to admit that I never even came in touch with non-linear material models).
 
-To run it, you will need Python v. 3 and the following libraries: os, pickle, shutil, webbrowser, time, re, codecs, xml, urllib and tkinter. Download the files `cawm_gui.py`, `cawm_classes.py`, `matLib.xml` and `__init__.py` and save them at the same location. Then run `cawm_gui.py` in the Python interpreter. Also, take a look at the [user guide](https://github.com/kaktus018/ca_wizard_mechanical/wiki/User-Guide) in the wiki.
+To run it, you will need Python v. 3 and the following libraries: os, pickle, shutil, webbrowser, time, re, codecs, xml, urllib, keyword, copy and tkinter. Download the files `cawm_gui.py`, `cawm_classes.py`, `matLib.xml` and `__init__.py` and save them at the same location. Then run `cawm_gui.py` in the Python interpreter. Also, take a look at the [user guide](https://github.com/kaktus018/ca_wizard_mechanical/wiki/User-Guide) in the wiki (not yet updated to v.0.2).
 
 For license information, take a look at [LICENSE.txt](LICENSE.txt).
+
+Version overview:
+
+- v.0.1: Initial upload
+  
+- v.0.2: Added support for custom Python functions for restraints, loads and temperature fields.
 
 The latest version can be found in the [development branch](https://github.com/kaktus018/ca_wizard_mechanical/tree/development).
