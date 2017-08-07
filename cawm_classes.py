@@ -670,6 +670,8 @@ class SolverSet:
                 if hasFormulesForce or hasFormulesTorque:
                     if el.nodalGroupName == "whole mesh":
                         assiStr = "TOUT='OUI',"
+                    elif el.loadType == "Force on node":
+                        assiStr = "GROUP_NO='" + el.nodalGroupName + "',"
                     else:
                         assiStr = "GROUP_MA='" + el.nodalGroupName + "',"
                     tempStr = "_F(" + assiStr
@@ -762,6 +764,8 @@ class SolverSet:
                 if hasConstantsForce or hasConstantsTorque:
                     if el.nodalGroupName == "whole mesh":
                         assiStr = "TOUT='OUI',"
+                    elif el.loadType == "Force on node":
+                        assiStr = "GROUP_NO='" + el.nodalGroupName + "',"
                     else:
                         assiStr = "GROUP_MA='" + el.nodalGroupName + "',"
                     tempStr = "_F(" + assiStr
